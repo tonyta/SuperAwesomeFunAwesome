@@ -28,10 +28,14 @@ class MazePrinter
   include RowGenerator
   include BottomGenerator
 
-  def print(maze)
+  def initialize(maze)
+    @maze = maze
+  end
+
+  def print
     output = ''
-    maze.each { |row| output << generate_line(row) }
-    puts output << print_bottom(maze)
+    @maze.each { |row| output << generate_line(row) }
+    puts output << print_bottom(@maze)
   end
 end
 
