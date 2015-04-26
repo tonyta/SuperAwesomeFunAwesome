@@ -38,7 +38,7 @@ module MazeRuleEnforcer
   end
 end
 
-class Maze
+class BinaryMazeBuilder
   include MazePopulator
   include MazeRuleEnforcer
 
@@ -46,17 +46,17 @@ class Maze
     @maze = Array.new(num_rows) { Array.new(num_cols) }
   end
 
-  def maze
+  def build_maze
     populate_maze(@maze)
     enforce_rules_for(@maze)
     @maze
   end
 end
 
-RSpec.describe Maze, '#maze' do
+RSpec.describe BinaryMazeBuilder, '#build_maze' do
   let(:num_rows) { 3 }
   let(:num_cols) { 4 }
-  subject { described_class.new(num_rows, num_cols).maze }
+  subject { described_class.new(num_rows, num_cols).build_maze }
 
   it 'should be an Array' do
     expect(subject).to be_an Array

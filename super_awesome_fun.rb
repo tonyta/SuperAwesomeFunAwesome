@@ -2,9 +2,9 @@ require_relative 'maze'
 require_relative 'maze_printer'
 
 class SuperAwesomeFun
-  def initialize(rows:, cols:)
-    @rows = rows
-    @cols = cols
+  def initialize(rows:, cols:, printer: MazePrinter, maze_builder: BinaryMazeBuilder)
+    @maze = maze_builder.new(rows, cols).build_maze
+    @printer = printer.new
   end
 
   def awesome!
