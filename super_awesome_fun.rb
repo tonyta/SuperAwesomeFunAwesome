@@ -20,7 +20,9 @@ OptionParser.new do |opts|
   opts.banner = "Usage: ruby super_awesome_fun.rb [options]"
 
   opts.on("-d", "--dimensions=ROWS,COLUMNS", "Dimensions of the maze (default: #{args[:rows]}, #{args[:cols]})") do |dimensions|
-    args[:rows], args[:cols] = dimensions.split(',').map(&:to_i)
+    rows, cols = dimensions.insert(-1, ', ').split(',').map(&:to_i)
+    args[:rows] = rows if rows > 0
+    args[:cols] = cols if cols > 0
   end
 
   opts.on("-b", "--box-printer", "Print using ASCII box-drawing") do
