@@ -23,33 +23,43 @@ module OutputPolisher
   end
 end
 
+module BelowIsNorthSquareBuilder
+  # this breaks the 3-line rule
+  def build_for_below_is_north(current, diagonal)
+    return ' ┌' if @current == :east  && @diagonal == :east
+    return ' ╷' if @current == :east  && @diagonal == :north
+    return ' ├' if @current == :north && @diagonal == :east
+    return ' │' if @current == :north && @diagonal == :north
+  end
+end
+
+module BelowIsEastSquareBuilder
+  # this breaks the 3-line rule
+  def build_for_below_is_east(current, diagonal)
+    return '──' if @current == :east  && @diagonal == :east
+    return '─╴' if @current == :east  && @diagonal == :north
+    return '─┴' if @current == :north && @diagonal == :east
+    return '─┘' if @current == :north && @diagonal == :north
+  end
+end
+
 class SquareBuilder
+  # builds bottom and bottom right corner of the square of a given cell
+  # while monitoring those that affect it (cell below and cell diagonal from)
+
+  include BelowIsNorthSquareBuilder
+  include BelowIsEastSquareBuilder
+
   def initialize(maze, row, col_num)
-    @current = maze[row][col_num]
-    @below   = maze[row+1] && maze[row+1][col_num]   || :east
-    @diag    = maze[row+1] && maze[row+1][col_num+1] || :east
+    @current     = maze[row][col_num]
+    @below       = maze[row+1] && maze[row+1][col_num]   || :east
+    @diagonal    = maze[row+1] && maze[row+1][col_num+1] || :east
   end
 
   def build_square
-    if @current == :east && @diag == :east && @below == :east
-      '──'
-    elsif @current == :east && @diag == :east && @below == :north
-      ' ┌'
-    elsif @current == :east && @diag == :north && @below == :east
-      '─╴'
-    elsif @current == :east && @diag == :north && @below == :north
-      ' ╷'
-    elsif @current == :north && @diag == :east && @below == :east
-      '─┴'
-    elsif @current == :north && @diag == :east && @below == :north
-      ' ├'
-    elsif @current == :north && @diag == :north && @below == :east
-      '─┘'
-    elsif @current == :north && @diag == :north && @below == :north
-      ' │'
-    else
-      ' │'
-    end
+    return ' │' if @current.nil?
+    return build_for_below_is_north(@current, @diagonal) if @below == :north
+    return build_for_below_is_east(@current, @diagonal)  if @below == :east
   end
 end
 
