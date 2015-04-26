@@ -87,7 +87,7 @@ RSpec.describe BinaryMazeBuilder, '#build_maze' do
   end
 
   it 'should have all cells be :north or :east except for the top right corner' do
-    subject.first.pop
+    subject.first.pop # removes top right corner
     expect(subject.flatten).to all( be(:north).or be(:east) )
   end
 end
