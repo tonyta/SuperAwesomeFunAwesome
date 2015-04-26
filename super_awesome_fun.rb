@@ -1,10 +1,10 @@
 require_relative 'maze'
-require_relative 'maze_printer'
+require_relative 'simple_maze_printer'
 require_relative 'box_maze_printer'
 require 'optparse'
 
 class SuperAwesomeFun
-  def initialize(rows:, cols:, printer: MazePrinter, maze_builder: BinaryMazeBuilder)
+  def initialize(rows:, cols:, printer: SimpleMazePrinter, maze_builder: BinaryMazeBuilder)
     @maze = maze_builder.new(rows, cols).build_maze
     @printer = printer.new(@maze)
   end

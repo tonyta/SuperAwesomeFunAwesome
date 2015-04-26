@@ -24,7 +24,7 @@ module BottomGenerator
   end
 end
 
-class MazePrinter
+class SimpleMazePrinter
   include RowGenerator
   include BottomGenerator
 
@@ -64,9 +64,9 @@ RSpec.describe RowGenerator, '#generate_line' do
   end
 end
 
-RSpec.describe MazePrinter, '#print' do
+RSpec.describe SimpleMazePrinter, '#print' do
   let(:maze) { [[:east, :east, nil],[:east, :north, :north]]}
-  let(:subject) { MazePrinter.new.print(maze) }
+  let(:subject) { described_class.new(maze).print }
 
   it 'should print a maze' do
     expect{ subject }.to output("|¯ ¯ ¯|\n|¯  | |\n ¯ ¯ ¯ \n").to_stdout
