@@ -23,27 +23,29 @@ module OutputPolisher
   end
 end
 
-module SquareBuilder
-  def build_square(maze, row, col)
-    current = maze[row][col]
-    below   = maze[row+1] && maze[row+1][col]   || :east
-    diag    = maze[row+1] && maze[row+1][col+1] || :east
+class SquareBuilder
+  def initialize(maze, row, col_num)
+    @current = maze[row][col_num]
+    @below   = maze[row+1] && maze[row+1][col_num]   || :east
+    @diag    = maze[row+1] && maze[row+1][col_num+1] || :east
+  end
 
-    if current == :east && diag == :east && below == :east
+  def build_square
+    if @current == :east && @diag == :east && @below == :east
       '──'
-    elsif current == :east && diag == :east && below == :north
+    elsif @current == :east && @diag == :east && @below == :north
       ' ┌'
-    elsif current == :east && diag == :north && below == :east
+    elsif @current == :east && @diag == :north && @below == :east
       '─╴'
-    elsif current == :east && diag == :north && below == :north
+    elsif @current == :east && @diag == :north && @below == :north
       ' ╷'
-    elsif current == :north && diag == :east && below == :east
+    elsif @current == :north && @diag == :east && @below == :east
       '─┴'
-    elsif current == :north && diag == :east && below == :north
+    elsif @current == :north && @diag == :east && @below == :north
       ' ├'
-    elsif current == :north && diag == :north && below == :east
+    elsif @current == :north && @diag == :north && @below == :east
       '─┘'
-    elsif current == :north && diag == :north && below == :north
+    elsif @current == :north && @diag == :north && @below == :north
       ' │'
     else
       ' │'
@@ -51,30 +53,40 @@ module SquareBuilder
   end
 end
 
-module LineBuilder
-  include SquareBuilder
+class LineBuilder
+  def initialize(maze)
+    @maze = maze
+  end
 
-  def build_line(maze, row)
-    line = maze[row].map.with_index { |_, col| build_square(maze, row, col) }
-    line.join
+  def build_line(row_num)
+    @maze[row_num].map.with_index do |_, col_num|
+      SquareBuilder.new(@maze, row_num, col_num).build_square
+    end.join
   end
 end
 
-module OutputBuilder
-  include LineBuilder
+class OutputBuilder
+  def initialize(maze)
+    @maze = maze
+    @line_builder = LineBuilder.new(maze)
+  end
 
-  def build_output(maze)
-    maze.map.with_index { |_, row| build_line(maze, row) }
+  def build_output
+    @maze.map.with_index { |_, row_num| @line_builder.build_line(row_num) }
   end
 end
 
 class BoxMazePrinter
-  include OutputBuilder
   include OutputPolisher
 
-  def print(maze)
-    output = build_output(maze)
-    polish_output(output, maze)
+  def initialize(maze)
+    @maze = maze
+    @builder = OutputBuilder.new(maze)
+  end
+
+  def print
+    output = @builder.build_output
+    polish_output(output, @maze)
     puts output
   end
 end

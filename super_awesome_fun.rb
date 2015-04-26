@@ -6,11 +6,11 @@ require 'optparse'
 class SuperAwesomeFun
   def initialize(rows:, cols:, printer: MazePrinter, maze_builder: BinaryMazeBuilder)
     @maze = maze_builder.new(rows, cols).build_maze
-    @printer = printer.new
+    @printer = printer.new(@maze)
   end
 
   def awesome!
-    @printer.print(@maze)
+    @printer.print
   end
 end
 
