@@ -23,35 +23,48 @@ module OutputPolisher
   end
 end
 
-module OutputBuilder
-  def build_output(maze)
-    maze.map.with_index do |row, row_num|
-      row.map.with_index do |cell, col_num|
-        current = cell
-        below = maze[row_num+1] && maze[row_num+1][col_num]   || :east
-        diag =  maze[row_num+1] && maze[row_num+1][col_num+1] || :east
+module SquareBuilder
+  def build_square(maze, row, col)
+    current = maze[row][col]
+    below   = maze[row+1] && maze[row+1][col]   || :east
+    diag    = maze[row+1] && maze[row+1][col+1] || :east
 
-        row = if current == :east && diag == :east && below == :east
-          '──'
-        elsif current == :east && diag == :east && below == :north
-          ' ┌'
-        elsif current == :east && diag == :north && below == :east
-          '─╴'
-        elsif current == :east && diag == :north && below == :north
-          ' ╷'
-        elsif current == :north && diag == :east && below == :east
-          '─┴'
-        elsif current == :north && diag == :east && below == :north
-          ' ├'
-        elsif current == :north && diag == :north && below == :east
-          '─┘'
-        elsif current == :north && diag == :north && below == :north
-          ' │'
-        else
-          ' │'
-        end
-      end.join
+    if current == :east && diag == :east && below == :east
+      '──'
+    elsif current == :east && diag == :east && below == :north
+      ' ┌'
+    elsif current == :east && diag == :north && below == :east
+      '─╴'
+    elsif current == :east && diag == :north && below == :north
+      ' ╷'
+    elsif current == :north && diag == :east && below == :east
+      '─┴'
+    elsif current == :north && diag == :east && below == :north
+      ' ├'
+    elsif current == :north && diag == :north && below == :east
+      '─┘'
+    elsif current == :north && diag == :north && below == :north
+      ' │'
+    else
+      ' │'
     end
+  end
+end
+
+module LineBuilder
+  include SquareBuilder
+
+  def build_line(maze, row)
+    line = maze[row].map.with_index { |_, col| build_square(maze, row, col) }
+    line.join
+  end
+end
+
+module OutputBuilder
+  include LineBuilder
+
+  def build_output(maze)
+    maze.map.with_index { |_, row| build_line(maze, row) }
   end
 end
 
