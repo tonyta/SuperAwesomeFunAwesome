@@ -8,9 +8,7 @@ class SuperAwesomeFun
   end
 
   def awesome!
-    printer = MazePrinter.new
-    maze = Maze.new(@rows, @cols)
-    puts printer.print(maze.maze)
+    @printer.print(@maze)
   end
 end
 

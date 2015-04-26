@@ -1,4 +1,3 @@
-
 module SquareGenerator
   def generate_square(cell)
     return "¯ " if cell == :east
@@ -30,9 +29,9 @@ class MazePrinter
   include BottomGenerator
 
   def print(maze)
-    output = ""
+    output = ''
     maze.each { |row| output << generate_line(row) }
-    output << print_bottom(maze)
+    puts output << print_bottom(maze)
   end
 end
 
@@ -66,7 +65,7 @@ RSpec.describe MazePrinter, '#print' do
   let(:subject) { MazePrinter.new.print(maze) }
 
   it 'should print a maze' do
-    expect(subject).to eq("|¯ ¯ ¯|\n|¯  | |\n ¯ ¯ ¯ \n")
+    expect{ subject }.to output("|¯ ¯ ¯|\n|¯  | |\n ¯ ¯ ¯ \n").to_stdout
   end
 end
 
