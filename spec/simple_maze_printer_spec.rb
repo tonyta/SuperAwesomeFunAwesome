@@ -26,7 +26,7 @@ RSpec.describe RowGenerator, '#generate_line' do
 end
 
 RSpec.describe SimpleMazePrinter, '#print' do
-  let(:maze) { [[:east, :east, nil],[:east, :north, :north]]}
+  let(:maze) { [[:east, :east, nil], [:east, :north, :north]]}
   let(:subject) { described_class.new(maze).print }
 
   it 'should print a maze' do

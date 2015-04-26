@@ -23,6 +23,12 @@ module OutputPolisher
   end
 end
 
+module TopRightCornerSquareBuilder
+  def build_for_top_right_corner(below)
+    below == :north ? ' │' : '─┘'
+  end
+end
+
 module BelowIsNorthSquareBuilder
   # this breaks the 3-line rule
   def build_for_below_is_north(current, diagonal)
@@ -47,6 +53,7 @@ class SquareBuilder
   # builds bottom and bottom right corner of the square of a given cell
   # while monitoring those that affect it (cell below and cell diagonal from)
 
+  include TopRightCornerSquareBuilder
   include BelowIsNorthSquareBuilder
   include BelowIsEastSquareBuilder
 
@@ -57,7 +64,7 @@ class SquareBuilder
   end
 
   def build_square
-    return ' │' if @current.nil?
+    return build_for_top_right_corner(@below) if @current.nil?
     return build_for_below_is_north(@current, @diagonal) if @below == :north
     return build_for_below_is_east(@current, @diagonal)  if @below == :east
   end
