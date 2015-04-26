@@ -1,4 +1,4 @@
-require_relative 'maze'
+require_relative 'binary_maze'
 require_relative 'simple_maze_printer'
 require_relative 'box_maze_printer'
 require 'optparse'

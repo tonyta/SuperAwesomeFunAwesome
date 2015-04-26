@@ -1,4 +1,4 @@
-require './maze'
+require './binary_maze'
 
 RSpec.describe BinaryMazeBuilder, '#build_maze' do
   let(:num_rows) { 3 }
